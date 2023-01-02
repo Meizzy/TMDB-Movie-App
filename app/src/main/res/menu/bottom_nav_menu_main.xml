@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home_icon"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/discover"
+        android:icon="@drawable/ic_explore_24"
+        android:title="@string/explore"/>
+
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/favorites_icon"
+        android:title="@string/favorite"/>
+
+</menu>

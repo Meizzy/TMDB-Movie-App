@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">TMDB App</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="movie_catalog">Movie Catalog</string>
+    <string name="popular_movies">Popular Movies</string>
+    <string name="trending_movies">Top rated Movies</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="release_date">Release Date</string>
+    <string name="content_description">A beautiful picture from the movie</string>
+    <string name="failed_string">Sorry no movies to display at the moment</string>
+    <string name="movie_title_text">Title: %s</string>
+    <string name="movie_release_date_text">This movie was released on %s and it has a rating of %s/10.</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="searchable_hint">Enter movie name</string>
+    <string name="action_search">Search</string>
+    <string name="search_results">Search results</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorites</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="explore">Explore</string>
+    <string name="title_movie_details">Movie Details</string>
+    <string name="similar_movies">See similar movies</string>
+</resources>
