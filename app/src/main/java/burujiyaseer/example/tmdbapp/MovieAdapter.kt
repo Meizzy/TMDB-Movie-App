@@ -2,6 +2,7 @@ package burujiyaseer.example.tmdbapp
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 
 class MovieViewHolder( val itemBinding: MovieItemBinding) : RecyclerView.ViewHolder(itemBinding.root){
     private val imageBase = "https://image.tmdb.org/t/p/w500/"
+
     fun bindMovie(movie : Movie, context: Context){
 
         itemBinding.movieTitle.text = movie.title
@@ -38,14 +40,15 @@ class MovieAdapter(
         val itemBinding = MovieItemBinding.inflate( LayoutInflater.from(parent.context), parent, false)
         return MovieViewHolder(itemBinding)
     }
+
     fun getPhoto(position: Int): Movie? {
         return if (movies.isNotEmpty()) movies[position] else null
     }
+
     fun loadNewData(movieList : List<Movie>){
         movies = movieList
         notifyDataSetChanged()
     }
-
 
     override fun getItemCount(): Int = if(movies.isNotEmpty()) movies.size else 1
 
@@ -53,9 +56,12 @@ class MovieAdapter(
         if(movies.isEmpty())    {
             holder.itemBinding.moviePoster.setImageResource(R.drawable.placeholder)
             holder.itemBinding.movieTitle.setText(R.string.failed_string)
+            holder.itemBinding.movieRatings.visibility = View.GONE
+            holder.itemBinding.movieReleaseDate.visibility = View.GONE
         }else   {
-
-        holder.bindMovie(movies[position],holder.itemView.context)
+            holder.itemBinding.movieRatings.visibility = View.VISIBLE
+            holder.itemBinding.movieReleaseDate.visibility = View.VISIBLE
+            holder.bindMovie(movies[position],holder.itemView.context)
     }
     }
 

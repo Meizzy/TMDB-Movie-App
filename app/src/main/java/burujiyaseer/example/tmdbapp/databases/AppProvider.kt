@@ -25,6 +25,7 @@ val CONTENT_AUTHORITY_URI: Uri = Uri.parse("content://$CONTENT_AUTHORITY")
 class AppProvider: ContentProvider(){
 
     private val uriMatcher by lazy { buildUriMatcher() }
+
     private fun buildUriMatcher() : UriMatcher {
         Log.d(TAG, "buildUriMatcher starts")
         val matcher = UriMatcher(UriMatcher.NO_MATCH)
@@ -58,9 +59,9 @@ class AppProvider: ContentProvider(){
         p3: Array<out String>?,
         p4: String?
     ): Cursor? {
-        Log.d(TAG,"query: called with uri $uri")
+        Log.d(TAG, "query: called with uri $uri")
         val match = uriMatcher.match(uri)
-        Log.d(TAG,"query: matches $match")
+        Log.d(TAG, "query: matches $match")
         val queryBuilder = SQLiteQueryBuilder()
 
         when (match) {
@@ -75,11 +76,11 @@ class AppProvider: ContentProvider(){
             else -> throw IllegalArgumentException("Unknown URI: $uri")
         }
 
-        val context = context ?: throw NullPointerException("In query function.  Context can't be null here!")
+        val context =
+            context ?: throw NullPointerException("In query function.  Context can't be null here!")
         val db = AppDatabase.getInstance(context).readableDatabase
-        val cursor = queryBuilder.query(db, projection, p2, p3, null, null, p4)
 
-        return cursor
+        return queryBuilder.query(db, projection, p2, p3, null, null, p4)
     }
 
     override fun insert(uri: Uri, p1: ContentValues?): Uri {
@@ -161,6 +162,5 @@ class AppProvider: ContentProvider(){
         }
         Log.d(TAG, "Exiting delete, returning $count")
         return count
-
     }
 }
