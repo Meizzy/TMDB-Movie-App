@@ -1,4 +1,4 @@
-package burujiyaseer.example.tmdbapp.databases
+package burujiyaseer.example.tmdbapp.data.databases
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -22,29 +22,31 @@ private const val MOVIES = 100
 private const val MOVIES_ID = 101
 
 val CONTENT_AUTHORITY_URI: Uri = Uri.parse("content://$CONTENT_AUTHORITY")
-class AppProvider: ContentProvider(){
+
+class AppProvider : ContentProvider() {
 
     private val uriMatcher by lazy { buildUriMatcher() }
 
-    private fun buildUriMatcher() : UriMatcher {
+    private fun buildUriMatcher(): UriMatcher {
         Log.d(TAG, "buildUriMatcher starts")
         val matcher = UriMatcher(UriMatcher.NO_MATCH)
 
         //e.g. content://burujiyaseer.example.tmdbapp.databases.provider/FavoritesMovies
-        matcher.addURI(CONTENT_AUTHORITY,MoviesContract.TABLE_NAME, MOVIES)
+        matcher.addURI(CONTENT_AUTHORITY, MoviesContract.TABLE_NAME, MOVIES)
 
         //e.g. content://burujiyaseer.example.tmdbapp.databases.provider/FavoritesMovies/5
-        matcher.addURI(CONTENT_AUTHORITY,"${MoviesContract.TABLE_NAME}/#", MOVIES_ID)
+        matcher.addURI(CONTENT_AUTHORITY, "${MoviesContract.TABLE_NAME}/#", MOVIES_ID)
 
         return matcher
     }
+
     override fun onCreate(): Boolean {
-        Log.d(TAG,"onCreate: starts")
+        Log.d(TAG, "onCreate: starts")
         return true
     }
 
     override fun getType(uri: Uri): String {
-       return when (uriMatcher.match(uri)) {
+        return when (uriMatcher.match(uri)) {
             MOVIES -> MoviesContract.CONST_TYPE
 
             MOVIES_ID -> MoviesContract.CONTENT_ITEM_TYPE
@@ -53,11 +55,7 @@ class AppProvider: ContentProvider(){
     }
 
     override fun query(
-        uri: Uri,
-        projection: Array<out String>?,
-        p2: String?,
-        p3: Array<out String>?,
-        p4: String?
+        uri: Uri, projection: Array<out String>?, p2: String?, p3: Array<out String>?, p4: String?
     ): Cursor? {
         Log.d(TAG, "query: called with uri $uri")
         val match = uriMatcher.match(uri)
@@ -95,7 +93,7 @@ class AppProvider: ContentProvider(){
         when (match) {
             MOVIES -> {
                 val db = AppDatabase.getInstance(context!!).writableDatabase
-                recordId = db.insert(MoviesContract.TABLE_NAME,null,p1)
+                recordId = db.insert(MoviesContract.TABLE_NAME, null, p1)
                 if (recordId != -1L) {
                     returnUri = MoviesContract.buildUriFromId(recordId)
                 } else {
@@ -120,12 +118,12 @@ class AppProvider: ContentProvider(){
             MOVIES -> {
                 val db = AppDatabase.getInstance(context!!).writableDatabase
                 count = db.update(MoviesContract.TABLE_NAME, p1, p2, p3)
-                }
-            MOVIES_ID ->{
+            }
+            MOVIES_ID -> {
                 val db = AppDatabase.getInstance(context!!).writableDatabase
                 val id = MoviesContract.getId(uri)
                 selectionCriteria = "${MoviesContract.Columns.ID} = $id"
-                if (p2 != null && p2.isNotEmpty())  {
+                if (p2 != null && p2.isNotEmpty()) {
                     selectionCriteria += " AND ($p2)"
                 }
                 count = db.update(MoviesContract.TABLE_NAME, p1, selectionCriteria, p3)
@@ -149,14 +147,14 @@ class AppProvider: ContentProvider(){
                 val db = AppDatabase.getInstance(context!!).writableDatabase
                 count = db.delete(MoviesContract.TABLE_NAME, p1, p2)
             }
-            MOVIES_ID ->{
+            MOVIES_ID -> {
                 val db = AppDatabase.getInstance(context!!).writableDatabase
                 val id = MoviesContract.getId(uri)
                 selectionCriteria = "${MoviesContract.Columns.ID} = $id"
-                if (p1 != null && p1.isNotEmpty())  {
+                if (p1 != null && p1.isNotEmpty()) {
                     selectionCriteria += " AND ($p1)"
                 }
-                count = db.delete(MoviesContract.TABLE_NAME,  selectionCriteria, p2)
+                count = db.delete(MoviesContract.TABLE_NAME, selectionCriteria, p2)
             }
             else -> throw IllegalArgumentException("Unknown URI: $uri")
         }

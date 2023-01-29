@@ -7,7 +7,7 @@
     android:padding="8dp"
     android:paddingBottom="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MovieDetailsActivity"
+    tools:context=".ui.details.MovieDetailsActivity"
     tools:showIn="@layout/activity_movie_details"
 
     >

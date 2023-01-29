@@ -5,15 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import burujiyaseer.example.tmdbapp.databinding.ActivityMainBinding
+import burujiyaseer.example.tmdbapp.ui.search.SearchActivity
 
 
 private const val TAG = "MainActivity"
 
-class MainActivity : BaseActivity() {
-
+class MainActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 

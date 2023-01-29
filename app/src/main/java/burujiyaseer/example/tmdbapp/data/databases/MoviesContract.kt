@@ -1,12 +1,12 @@
-package burujiyaseer.example.tmdbapp.databases
+package burujiyaseer.example.tmdbapp.data.databases
 
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.BaseColumns
 
 object MoviesContract {
-//    internal const val TABLE_NAME = "LikedMovies"
     internal const val TABLE_NAME = "FavoritesMovies"
+
     /**
      * The URI to access the LikedMovies Table.
      */
@@ -25,15 +25,12 @@ object MoviesContract {
         const val OVERVIEW = "overview"
         const val RATINGS = "vote_average"
     }
-//    object NewColumns {
-//        const val ID = BaseColumns._ID
-//        const val MOVIE_ID = "id"
-//    }
 
     fun getId(uri: Uri): Long {
         return ContentUris.parseId(uri)
     }
+
     fun buildUriFromId(id: Long): Uri {
-        return ContentUris.withAppendedId(CONTENT_URI,id)
+        return ContentUris.withAppendedId(CONTENT_URI, id)
     }
 }

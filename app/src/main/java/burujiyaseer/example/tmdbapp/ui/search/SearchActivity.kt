@@ -1,4 +1,4 @@
-package burujiyaseer.example.tmdbapp
+package burujiyaseer.example.tmdbapp.ui.search
 
 import android.app.SearchManager
 import android.content.Context
@@ -8,19 +8,28 @@ import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.SearchView
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import burujiyaseer.example.tmdbapp.R
+import burujiyaseer.example.tmdbapp.data.network.Resource
 import burujiyaseer.example.tmdbapp.databinding.ActivitySearchBinding
-import burujiyaseer.example.tmdbapp.models.Movie
+import burujiyaseer.example.tmdbapp.ui.MovieAdapter
+import burujiyaseer.example.tmdbapp.ui.RecyclerItemClickListener
+import burujiyaseer.example.tmdbapp.ui.base.MOVIE_TRANSFER
+import burujiyaseer.example.tmdbapp.ui.details.MovieDetailsActivity
+import burujiyaseer.example.tmdbapp.ui.hide
+import burujiyaseer.example.tmdbapp.ui.show
 
 private const val TAG = "SearchActivity"
-class SearchActivity : BaseActivity(),
-    RecyclerItemClickListener.OnRecyclerClickListener,
-    GetRawApiData.OnDataAvailable {
+
+class SearchActivity : AppCompatActivity(), RecyclerItemClickListener.OnRecyclerClickListener {
     private var searchView: SearchView? = null
 //    val toolbar: Toolbar
 
     private val movieAdapter = MovieAdapter(ArrayList())
-    private lateinit var binding:ActivitySearchBinding
+    private lateinit var binding: ActivitySearchBinding
+    private val viewModel: SearchViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, ".onCreate: starts")
@@ -32,20 +41,36 @@ class SearchActivity : BaseActivity(),
 
 //        binding.bottomNavigation.setOnItemSelectedListener(setCurrentActivityListener)
 
-        binding.includeSearchResults.rvMoviesList.layoutManager = GridLayoutManager(this,2)
-        binding.includeSearchResults.rvMoviesList.addOnItemTouchListener(
-            RecyclerItemClickListener(
-                this,
-                binding.includeSearchResults.rvMoviesList,
-                this
+        binding.includeSearchResults.rvMoviesList.apply {
+            layoutManager = GridLayoutManager(this@SearchActivity, 2)
+            addOnItemTouchListener(
+                RecyclerItemClickListener(
+                    this@SearchActivity,
+                    binding.includeSearchResults.rvMoviesList,
+                    this@SearchActivity
+                )
             )
-        )
-
+            adapter = movieAdapter
+        }
+        viewModel.moviesListLiveData.observe(this) {
+            when (it) {
+                is Resource.Failure -> {
+                    binding.includeSearchResults.progressBar.hide()
+                    movieAdapter.loadNewData(ArrayList())
+                }
+                Resource.Loading -> binding.includeSearchResults.progressBar.show()
+                is Resource.Success -> {
+                    binding.includeSearchResults.progressBar.hide()
+                    movieAdapter.loadNewData(it.value)
+                }
+            }
+        }
 
 //        toolbar.setNavigationOnClickListener{
 //            finish()
 //        }
         Log.d(TAG, ".onCreate: ends")
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -61,7 +86,7 @@ class SearchActivity : BaseActivity(),
 //        Log.d(TAG, ".onCreateOptionsMenu: $searchableInfo")
 
         searchView?.isIconified = false
-        searchView?.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Log.d(TAG, ".onQueryTextSubmit: called")
 
@@ -69,11 +94,10 @@ class SearchActivity : BaseActivity(),
 //                sharedPref.edit().putString(MOVIE_QUERY, query).apply()
                 searchView?.clearFocus()
                 if ((query != null) && query.isNotEmpty()) {
-                    val getRawApiData = GetRawApiData(this@SearchActivity)
-                    getRawApiData.getSearchMovieData(query)
-                        binding.includeSearchResults.tvSearch.text = resources.getString(R.string.search_results)
-                        binding.includeSearchResults.rvMoviesList.adapter = movieAdapter
-                    }
+                    viewModel.getQueriedMoviesList(query)
+                    binding.includeSearchResults.tvSearch.text =
+                        resources.getString(R.string.search_results)
+                }
                 return true
             }
 
@@ -92,15 +116,6 @@ class SearchActivity : BaseActivity(),
         return true
     }
 
-    override fun onStop() {
-        Log.d(TAG, "onStop called")
-        super.onStop()
-    }
-
-    override fun onSearchDataAvailable(data: List<Movie>) {
-        Log.d(TAG,"onDataAvailable starts with $data")
-        movieAdapter.loadNewData(data)
-        Log.d(TAG,"onDataAvailable ends")    }
 
     override fun onItemClick(view: View, position: Int) {
         Log.d(TAG, ".onItemClick: starts")

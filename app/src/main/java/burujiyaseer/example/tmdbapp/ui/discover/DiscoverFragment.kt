@@ -1,4 +1,4 @@
-package burujiyaseer.example.tmdbapp.fragments
+package burujiyaseer.example.tmdbapp.ui.discover
 
 import android.os.Bundle
 import android.view.LayoutInflater
