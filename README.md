@@ -7,6 +7,7 @@ You can view trending, top-rated and the latest movies on the app, search for yo
 * Android Studio
 * XML
 * Navigation components
+* MVVM & CLEAN architecture
 * Content Providers
 * Content Resolvers
 * SQLite 3
