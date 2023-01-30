@@ -15,7 +15,7 @@ class MovieApiService {
     fun <MovieApiInterface> buildApi(
         api: Class<MovieApiInterface>
     ): MovieApiInterface {
-        return Retrofit.Builder().baseUrl(BASE_URL)
+        return Retrofit.Builder().baseUrl(BASE_URL).client(getRetrofitClient())
             .addConverterFactory(GsonConverterFactory.create()).build().create(api)
     }
 
