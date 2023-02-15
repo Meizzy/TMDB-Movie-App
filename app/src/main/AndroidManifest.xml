@@ -45,6 +45,7 @@
         <activity
             android:name=".ui.details.MovieDetailsActivity"
             android:label="@string/title_movie_details"
+            android:theme="@style/Theme.TMDBApp.NoActionBar"
             android:parentActivityName=".MainActivity">
         </activity>
         <provider
