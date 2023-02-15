@@ -44,7 +44,9 @@ class MovieDetailsActivity : AppCompatActivity(),
         binding = ActivityMovieDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 //        activateToolbar(true)
-
+        binding.includeDetails.backButton.setOnClickListener {
+            finish()
+        }
         viewModel.moviesListLiveData.observe(this) {
             when (it) {
                 is Resource.Failure -> {
